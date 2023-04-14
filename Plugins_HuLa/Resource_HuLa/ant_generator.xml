@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1"?> <project name="tresos" default="all" basedir=".">
+
+  <ng.getgeneratorvar name="outputDir" property="outputDirProperty" />
+  <ng.getgeneratorvar name="postBuildVariant" property="postBuildVariantProperty"/>
+
+  <target name="SrcFilesRename_TorF">
+    <condition property="booleanSrcFilesRenamedCheck" value="true" else="false">
+        <and>
+           <available file="${outputDirProperty}\src" type="dir"/>
+           <isset property="postBuildVariantProperty"/>
+           <not>
+            <equals arg1="${postBuildVariantProperty}" arg2=""/>
+           </not>
+        </and>   
+    </condition>     
+  </target>
+  
+  <target name="IncludeFilesRename_TorF">
+    <condition property="booleanIncludeFilesRenamedCheck" value="true"  else="false">
+        <and>
+           <available file="${outputDirProperty}\include" type="dir"/>
+           <isset property="postBuildVariantProperty"/>
+           <not>
+            <equals arg1="${postBuildVariantProperty}" arg2=""/>
+           </not>
+        </and>   
+    </condition> 
+  </target>
+  
+  <target name="renameSrcFiles" if="${booleanSrcFilesRenamedCheck}" depends="SrcFilesRename_TorF">
+    <move todir="${outputDirProperty}\src">
+        <fileset dir="${outputDirProperty}\src">
+            <include name="Resource_PBcfg.c"/>
+			<include name="CDD_Resource_PBcfg.c"/>
+			<include name="*_Ip_PBcfg.c"/>
+			<include name="*_Ipw_PBcfg.c"/>
+        </fileset>
+        <mapper type="glob" from="*PBcfg.c" to="*${postBuildVariantProperty}_PBcfg.c"/>
+    </move>
+	
+    <move todir="${outputDirProperty}\src">
+        <fileset dir="${outputDirProperty}\src">
+            <include name="Resource_168_Instance0_PBcfg.c"/>
+			<include name="Resource_168_Instance1_PBcfg.c"/>
+			<include name="Resource_168_Instance2_PBcfg.c"/>
+			<include name="Resource_168_Instance3_PBcfg.c"/>
+			<include name="Resource_168_Instance4_PBcfg.c"/>
+        </fileset>
+        <mapper type="glob" from="*PBcfg.c" to="*${postBuildVariantProperty}_PBcfg.c"/>
+    </move>
+  </target>
+  
+  <target name="renameIncludeFiles" if="${booleanIncludeFilesRenamedCheck}" depends="IncludeFilesRename_TorF">
+    <move todir="${outputDirProperty}\include">
+        <fileset dir="${outputDirProperty}\include">
+            <include name="Resource_PBcfg.h"/>
+			<include name="CDD_Resource_PBcfg.h"/>
+			<include name="*_Ip_PBcfg.h"/>
+			<include name="*_Ipw_PBcfg.h"/>
+        </fileset>
+        <mapper type="glob" from="*PBcfg.h" to="*${postBuildVariantProperty}_PBcfg.h"/>
+    </move>
+	
+    <move todir="${outputDirProperty}\include">
+        <fileset dir="${outputDirProperty}\include">
+            <include name="Resource_168_Instance0_PBcfg.h"/>
+			<include name="Resource_168_Instance1_PBcfg.h"/>
+			<include name="Resource_168_Instance2_PBcfg.h"/>
+			<include name="Resource_168_Instance3_PBcfg.h"/>
+			<include name="Resource_168_Instance4_PBcfg.h"/>
+        </fileset>
+        <mapper type="glob" from="*PBcfg.h" to="*${postBuildVariantProperty}_PBcfg.h"/>
+    </move>
+  </target>
+    
+  <target name="all" depends="renameSrcFiles,renameIncludeFiles ">
+
+  </target>
+</project>
+
